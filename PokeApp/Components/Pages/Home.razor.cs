@@ -1,33 +1,31 @@
 ﻿using InjectedServices.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Models.Pokemon;
+using MudBlazor;
 
 namespace PokeApp.Components.Pages
 {
     public partial class HomeBase : ComponentBase
     {
-        protected override async Task OnInitializedAsync()
-        {
-            await CargarPokemons();
-        }
 
         [Inject] private IPokeService _pokeService { get; set; } = default!;
 
         protected PokemonList _pokemonList = new();
-
         protected IEnumerable<PokemonListItem>? _dsPokemonListItem;
+        protected int _selected = 1;
 
-        protected async Task CargarPokemons()
+        protected async Task<GridData<PokemonListItem>> LoadServerData(GridState<PokemonListItem> state)
         {
-            try
+            int offset = state.Page * state.PageSize;
+            int limit = state.PageSize;
+
+            var response = await _pokeService.GetPokemon(offset, limit);
+
+            return new GridData<PokemonListItem>
             {
-                var response = await _pokeService.GetPokemon(20, 20);
-                _dsPokemonListItem = response.results;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+                Items = response.results,
+                TotalItems = response.count
+            };
         }
     }
 }

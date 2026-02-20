@@ -1,12 +1,25 @@
 ﻿@page "/"
+@using Models.Pokemon
 @inherits HomeBase
 
-<MudDataGrid Items="@_dsPokemonListItem">
+<MudDataGrid T="PokemonListItem"
+             ServerData="LoadServerData"
+             RowsPerPage="10"
+             Hover="true"
+             Bordered="true">
     <Columns>
-        <PropertyColumn Property="x => x.name" Title="Nr" />
-        <PropertyColumn Property="x => x.url" />
+        <PropertyColumn Title="#" Property="x => x.Id" />
+        <PropertyColumn Title="Nombre" Property="x => x.name" />
+        <TemplateColumn Title="Imagen">
+            <CellTemplate>
+                <img src="@($"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{context.Item.Id}.png")"
+                     width="48" />
+            </CellTemplate>
+        </TemplateColumn>
     </Columns>
-    <PagerContent>
-        <MudDataGridPager />
-    </PagerContent >
 </MudDataGrid>
+
+<MudPagination Color="Color.Primary" Count="4" @bind-Selected="@_selected" />
+
+<MudText Align="Align.Center">Selected page: @_selected</MudText>
+
