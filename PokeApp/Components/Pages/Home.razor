@@ -1,0 +1,12 @@
+﻿@page "/"
+@inherits HomeBase
+
+<MudDataGrid Items="@_dsPokemonListItem">
+    <Columns>
+        <PropertyColumn Property="x => x.name" Title="Nr" />
+        <PropertyColumn Property="x => x.url" />
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager />
+    </PagerContent >
+</MudDataGrid>
