@@ -1,5 +1,5 @@
 <Solution>
   <Project Path="InjectedServices/InjectedServices.csproj" />
   <Project Path="Models/Models.csproj" />
-  <Project Path="PokeApp/PokeApp.csproj" />
+  <Project Path="PokeApp/PokeApp.csproj" Id="9eb92282-0b74-4ea4-98af-81e2d25463c8" />
 </Solution>

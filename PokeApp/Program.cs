@@ -1,36 +1,44 @@
-using MudBlazor.Services;
-using PokeApp.Components;
-using PokeApp.Services;
+using InjectedServices.Interfaces;
+using InjectedServices.Interfaces.Refit;
+using InjectedServices.Services;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddControllersWithViews();
 
-// Servicio de MudBlazor
-builder.Services.AddMudServices();
-
-// Conexion a PokeAPI
 string apiConnecttion = builder.Configuration["PokeAPI"] ?? "";
-builder.Services.AllServices(apiConnecttion);
+builder.Services.AddControllersWithViews();
+
+// Refit
+builder.Services.AddRefitClient<IPokeAPI>()
+    .ConfigureHttpClient(c =>
+    {
+        c.BaseAddress = new Uri(apiConnecttion);
+    });
+
+builder.Services.AddScoped<IPokeService, PokeService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-app.UseAntiforgery();
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Pokemon}/{action=Index}/{id?}");
 
 app.Run();
