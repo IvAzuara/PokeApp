@@ -131,3 +131,78 @@ async function enviarExcel(btn) {
         btn.disabled    = false;
     }
 }
+
+
+// Colores por tipo de pokémon
+const tipoColores = {
+    fire: "#F08030",     water: "#6890F0",   grass: "#78C850",
+    electric: "#F8D030", psychic: "#F85888", ice: "#98D8D8",
+    dragon: "#7038F8",   dark: "#705848",    fairy: "#EE99AC",
+    normal: "#A8A878",   fighting: "#C03028", flying: "#A890F0",
+    poison: "#A040A0",   ground: "#E0C068",  rock: "#B8A038",
+    bug: "#A8B820",      ghost: "#705898",   steel: "#B8B8D0"
+};
+
+const statNombres = {
+    "hp": "HP", "attack": "Ataque", "defense": "Defensa",
+    "special-attack": "Sp. Ataque", "special-defense": "Sp. Defensa",
+    "speed": "Velocidad"
+};
+
+async function abrirModal(id) {
+    const modal = new bootstrap.Modal(document.getElementById("pokemonModal"));
+    
+    // Limpiar contenido anterior y mostrar cargando
+    document.getElementById("modalNombre").textContent  = "Cargando...";
+    document.getElementById("modalSprite").src          = "";
+    document.getElementById("modalTipos").innerHTML     = "";
+    document.getElementById("modalStats").innerHTML     = "";
+    modal.show();
+
+    try {
+        const res  = await fetch(`/Pokemon/GetStats?id=${id}`);
+        const data = await res.json();
+
+        // Nombre
+        document.getElementById("modalNombre").textContent = data.name;
+
+        // Sprite
+        document.getElementById("modalSprite").src = data.sprite;
+        document.getElementById("modalSprite").alt = data.name;
+
+        // Color del header según tipo principal
+        const colorPrincipal = tipoColores[data.types[0]] || "#6c757d";
+        document.getElementById("modalHeader").style.backgroundColor = colorPrincipal;
+        document.getElementById("modalHeader").style.color = "#fff";
+
+        // Tipos como badges
+        const tiposDiv = document.getElementById("modalTipos");
+        data.types.forEach(tipo => {
+            const badge = document.createElement("span");
+            badge.className   = "badge me-1 text-capitalize";
+            badge.textContent = tipo;
+            badge.style.backgroundColor = tipoColores[tipo] || "#6c757d";
+            tiposDiv.appendChild(badge);
+        });
+
+        // Barras de estadísticas
+        const statsDiv = document.getElementById("modalStats");
+        data.stats.forEach(s => {
+            const pct  = Math.min(Math.round((s.value / 255) * 100), 100);
+            const nombre = statNombres[s.name] || s.name;
+            statsDiv.innerHTML += `
+                <div class="d-flex align-items-center mb-2 gap-2">
+                    <span style="width:100px; text-align:right; font-size:.85rem">${nombre}</span>
+                    <span style="width:35px; text-align:right; font-size:.85rem">${s.value}</span>
+                    <div class="progress flex-grow-1" style="height:10px">
+                        <div class="progress-bar"
+                             style="width:${pct}%; background-color:${colorPrincipal}">
+                        </div>
+                    </div>
+                </div>`;
+        });
+
+    } catch {
+        document.getElementById("modalNombre").textContent = "Error al cargar";
+    }
+}

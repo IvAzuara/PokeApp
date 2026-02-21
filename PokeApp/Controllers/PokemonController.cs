@@ -203,5 +203,21 @@ namespace PokeApp.Controllers
                 });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStats(int id)
+        {
+            var stats = await _pokeService.GetPokemonById(id);
+
+            return Json(new {
+                name    = stats.name,
+                sprite  = stats.sprites?.front_default,
+                types   = stats.types.Select(t => t.type.name).ToList(),
+                stats   = stats.stats.Select(s => new {
+                    name  = s.stat.name,
+                    value = s.base_stat
+                }).ToList()
+            });
+        }
     }
 }

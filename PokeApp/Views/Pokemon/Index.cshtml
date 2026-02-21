@@ -63,22 +63,23 @@
         }
 
     </form>
+    
+    <div>
+        @* Botón exportar *@
+        <button onclick="exportarExcel(this)" 
+                class="btn btn-success"
+                data-page="@Model.Page"
+                data-search="@Model.Search">
+            Exportar Excel
+        </button>
 
-    @* Botón exportar *@
-    <button onclick="exportarExcel(this)" 
-            class="btn btn-success"
-            data-page="@Model.Page"
-            data-search="@Model.Search">
-        Exportar Excel
-    </button>
-
-    <button onclick="enviarExcel(this)"
-            class="btn btn-primary"
-            data-page="@Model.Page"
-            data-search="@Model.Search">
-        Enviar por correo
-    </button>
-
+        <button onclick="enviarExcel(this)"
+                class="btn btn-primary"
+                data-page="@Model.Page"
+                data-search="@Model.Search">
+            Enviar por correo
+        </button>
+    </div>
 </div>
 
 <table class="table table-striped table-hover align-middle">
@@ -93,14 +94,14 @@
     <tbody>
         @foreach (var pokemon in Model.Pokemons)
         {
-            <tr>
+            <tr style="cursor:pointer" onclick="abrirModal(@pokemon.Id)">
                 <td>@pokemon.Id</td>
                 <td>
                     @if (!string.IsNullOrEmpty(pokemon.SpriteUrl))
                     {
                         <img src="@pokemon.SpriteUrl"
-                             alt="@pokemon.name"
-                             width="64" height="64" />
+                            alt="@pokemon.name"
+                            width="64" height="64" />
                     }
                 </td>
                 <td class="text-capitalize">@pokemon.name</td>
@@ -137,3 +138,22 @@
         </div>
     </div>
 }
+
+
+
+@* Modal de estadísticas *@
+<div class="modal fade" id="pokemonModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title text-capitalize" id="modalNombre"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalSprite" src="" alt="" width="120" height="120" />
+                <div id="modalTipos" class="mb-3"></div>
+                <div id="modalStats"></div>
+            </div>
+        </div>
+    </div>
+</div>
