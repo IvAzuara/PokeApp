@@ -98,6 +98,11 @@ namespace PokeApp.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Endpoint para autocompletar especies
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetSpecies(string q = "")
         {
@@ -121,6 +126,11 @@ namespace PokeApp.Controllers
             return Json(filtered);
         }
 
+        /// <summary>
+        /// Endpoint para mostrar todos los Pokémon de una especie
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> BySpecies(string name)
         {
@@ -158,6 +168,11 @@ namespace PokeApp.Controllers
             return View("Index", vm);
         }
 
+        /// <summary>
+        /// Endpoint para recibir el Excel exportado desde el frontend y enviarlo por correo electrónico como adjunto
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> EnviarExcel([FromBody] EnviarExcelRequest request)
         {
@@ -204,6 +219,11 @@ namespace PokeApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Endpoint para obtener las estadísticas detalladas de un Pokémon por su ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetStats(int id)
         {
