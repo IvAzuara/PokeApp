@@ -26,5 +26,13 @@ namespace InjectedServices.Interfaces
         /// <param name="name"></param>
         /// <returns></returns>
         Task<PokemonStats> GetPokemonByName(string name);
+
+        /// <summary>
+        /// Método para buscar especies de Pokémon por nombre 
+        /// </summary>
+        /// <returns></returns>
+        Task<PokemonSpeciesList> SearchSpecies();
+
+        Task<PokemonSpeciesDetail> GetSpeciesByName(string name);
     }
 }

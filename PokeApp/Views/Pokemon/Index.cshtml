@@ -16,6 +16,7 @@
                placeholder="Buscar por nombre..."
                class="form-control w-auto"
                autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
 
         @* Dropdown de especie *@
         <div class="position-relative" id="speciesDropdown">
@@ -30,7 +31,6 @@
                 class="border rounded bg-white shadow position-absolute z-3"
                 style="display:none; min-width:220px; top:100%; left:0">
 
-                @* Buscador interno *@
                 <div class="p-2 border-bottom">
                     <input type="text"
                         id="speciesSearch"
@@ -39,25 +39,17 @@
                         autocomplete="off" />
                 </div>
 
-                @* Lista generada desde el modelo, sin llamadas AJAX *@
                 <ul id="speciesList"
                     class="list-group list-group-flush mb-0"
                     style="max-height:200px; overflow-y:auto">
-                    @foreach (var species in Model.AvailableSpecies)
-                    {
-                        <li class="list-group-item list-group-item-action text-capitalize species-option"
-                            data-name="@species"
-                            style="cursor:pointer">
-                            @species
-                        </li>
-                    }
+                    <li class="list-group-item text-muted small">Abriendo...</li>
                 </ul>
 
                 @if (!string.IsNullOrEmpty(Model.Species))
                 {
                     <div class="p-2 border-top">
-                        <a href="?pageSize=@Model.PageSize" class="btn btn-sm btn-outline-danger w-100">
-                            ✕ Quitar filtro
+                        <a href="/?pageSize=@Model.PageSize" class="btn btn-sm btn-outline-danger w-100">
+                            Quitar filtro
                         </a>
                     </div>
                 }
@@ -65,10 +57,9 @@
 
         </div>
 
-
         @if (!string.IsNullOrEmpty(Model.Search) || !string.IsNullOrEmpty(Model.Species))
         {
-            <a href="?pageSize=@Model.PageSize" class="btn btn-outline-secondary">✕ Limpiar</a>
+            <a href="/Pokemon?pageSize=@Model.PageSize" class="btn btn-outline-secondary">Limpiar</a>
         }
 
     </form>
@@ -79,6 +70,13 @@
             data-page="@Model.Page"
             data-search="@Model.Search">
         Exportar Excel
+    </button>
+
+    <button onclick="enviarExcel(this)"
+            class="btn btn-primary"
+            data-page="@Model.Page"
+            data-search="@Model.Search">
+        Enviar por correo
     </button>
 
 </div>

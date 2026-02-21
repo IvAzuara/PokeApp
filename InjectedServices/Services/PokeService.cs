@@ -18,7 +18,7 @@ namespace InjectedServices.Services
         public PokeService(IPokeAPI _) => _pokeAPI = _;
 
         /// <summary>
-        /// Método para obtener la lista de Pokémon desde la API de Pokémon, utilizando Refit para realizar la solicitud HTTP. Maneja errores y devuelve la lista de Pokémon o lanza una excepción si ocurre un error.
+        /// Método para obtener la lista de Pokémon 
         /// </summary>
         /// <param name="Ioffset"></param>
         /// <param name="Ilimit"></param>
@@ -35,7 +35,7 @@ namespace InjectedServices.Services
         }
 
         /// <summary>
-        /// Método para obtener los detalles de un Pokémon específico por su ID desde la API de Pokémon, utilizando Refit para realizar la solicitud HTTP. Maneja errores y devuelve los detalles del Pokémon o lanza una excepción si ocurre un error.
+        /// Método para obtener los detalles de un Pokémon específico por su ID 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -51,7 +51,7 @@ namespace InjectedServices.Services
         }
 
         /// <summary>
-        /// Método para obtener los detalles de un Pokémon específico por su nombre desde la API de Pokémon, utilizando Refit para realizar la solicitud HTTP. Maneja errores y devuelve los detalles del Pokémon o lanza una excepción si ocurre un error.
+        /// Método para obtener los detalles de un Pokémon específico por su nombre 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -59,6 +59,37 @@ namespace InjectedServices.Services
         public async Task<PokemonStats> GetPokemonByName(string name)
         {
             var response = await _pokeAPI.GetPokemonByName(name);
+
+            if (!response.IsSuccessStatusCode || response.Content is null)
+                throw new Exception("Error consultando PokéAPI");
+
+            return response.Content;
+        }
+
+        /// <summary>
+        /// Método para buscar especies de Pokémon por nombre 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<PokemonSpeciesList> SearchSpecies()
+        {
+            var response = await _pokeAPI.SearchSpecies();
+
+            if (!response.IsSuccessStatusCode || response.Content is null)
+                throw new Exception("Error consultando PokéAPI");
+
+            return response.Content;
+        }
+
+        /// <summary>
+        /// Método para obtener los detalles de un Pokémon específico por su especie
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<PokemonSpeciesDetail> GetSpeciesByName(string name)
+        {
+            var response = await _pokeAPI.GetSpeciesByName(name);
 
             if (!response.IsSuccessStatusCode || response.Content is null)
                 throw new Exception("Error consultando PokéAPI");

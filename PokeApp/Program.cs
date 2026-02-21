@@ -19,6 +19,8 @@ builder.Services.AddRefitClient<IPokeAPI>()
     });
 
 builder.Services.AddScoped<IPokeService, PokeService>();
+// Cache de memoria
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
